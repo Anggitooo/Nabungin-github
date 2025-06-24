@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Laporan Keuangan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #fce4ec, #f8bbd0);
+      margin: 0;
+      padding: 0;
+      color: #880e4f;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #d81b60;
+      font-size: 28px;
+    }
+
+    .emoji {
+      font-size: 40px;
+    }
+
+    table {
+      width: 95%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      background-color: #fce4ec;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #f48fb1;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    th {
+      background-color: #f8bbd0;
+      color: #6a1b9a;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      text-decoration: none;
+      color: white;
+      background-color: #ba68c8;
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    a:hover {
+      background-color: #ab47bc;
+    }
+
+    .info {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #6a1b9a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="emoji">📑💸</div>
+    <h2>Laporan Keuangan</h2>
+    <p>Lihat ringkasan tabungan pribadi dan kelompok kamu di sini!</p>
+
+    <div class="info" id="totalPribadi">Total Saldo Pribadi: Rp0</div>
+    <div class="info" id="totalKelompok">Total Saldo Kelompok: Rp0</div>
+
+    <!-- ... bagian head tetap sama -->
+<table>
+  <thead>
+    <tr>
+      <th>Jenis</th>
+      <th>Tanggal</th>
+      <th>Nama</th>
+      <th>Tabungan</th>
+      <th>Pengeluaran</th>
+      <th>Saldo</th>
+    </tr>
+  </thead>
+  <tbody id="tabelLaporan">
+  </tbody>
+</table>
+<a href="index.html">⬅️ Kembali ke Dashboard</a>
+  </div>
+<!-- ... lanjut di bagian script -->
+<script>
+  let totalPribadi = 0;
+  let totalKelompok = 0;
+
+  const tbody = document.getElementById("tabelLaporan");
+
+  const dataPribadi = JSON.parse(localStorage.getItem("tabunganPribadi")) || [];
+  dataPribadi.forEach(item => {
+    const row = tbody.insertRow();
+    const tanggal = item.tanggal || "-";
+    row.innerHTML = `
+      <td>Pribadi</td>
+      <td>${tanggal}</td>
+      <td>${item.nama}</td>
+      <td>Rp${item.tabungan.toLocaleString()}</td>
+      <td>Rp${item.pengeluaran.toLocaleString()}</td>
+      <td>Rp${item.saldo.toLocaleString()}</td>
+    `;
+    totalPribadi += item.saldo;
+  });
+
+  const dataKelompok = JSON.parse(localStorage.getItem("tabunganKelompok")) || [];
+  dataKelompok.forEach(item => {
+    const row = tbody.insertRow();
+    const tanggal = item.tanggal || "-";
+    row.innerHTML = `
+      <td>Kelompok</td>
+      <td>${tanggal}</td>
+      <td>${item.nama}</td>
+      <td>Rp${item.tabung.toLocaleString()}</td>
+      <td>Rp${item.keluar.toLocaleString()}</td>
+      <td>Rp${item.saldo.toLocaleString()}</td>
+    `;
+    totalKelompok += item.saldo;
+  });
+
+  document.getElementById("totalPribadi").innerText = `Total Saldo Pribadi: Rp${totalPribadi.toLocaleString()}`;
+  document.getElementById("totalKelompok").innerText = `Total Saldo Kelompok: Rp${totalKelompok.toLocaleString()}`;
+</script>
